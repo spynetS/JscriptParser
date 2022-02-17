@@ -1,5 +1,8 @@
 package JscriptParser;
 
+import JscriptParser.Elements.Function;
+import JscriptParser.Elements.JsClass;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,8 +23,10 @@ public class Parser {
     }
 
     private void addFunctionToCurrentClass(String functionLine,List<String> lines,int from){
+        System.out.println("new");
         Function newFunction = new Function();
         newFunction.setName(functionLine.substring(0,functionLine.indexOf("(")).replace(" ",""));
+        newFunction.setArguments(functionLine.substring(functionLine.indexOf("(")+1,functionLine.indexOf(")")));
         String body = "";
         int count = 0; // to see if the curly bracket belongs to the function
         for(int i = from;i<lines.size();i++) {
@@ -37,7 +42,7 @@ public class Parser {
             }
             body+=data+"\n";
         }
-        newFunction.addBody(body);
+        newFunction.addToBody(body);
         currentClass.addFunction(newFunction);
     }
 
@@ -55,10 +60,10 @@ public class Parser {
                     currentClass = classComp;
                     isInClass = true;
                 }
-                if(isInClass){
+                if(isInClass&&!data.contains("if")){
                     if(data.contains("(")&&data.contains(")")){
 
-                        if(lines.get(i+1).contains("{")){
+                        if(lines.get(i+1).replace(" ","").equals("{")&&!data.contains(";")){
                             //it is a function bro
                             addFunctionToCurrentClass(data,lines,i+2);
                         }

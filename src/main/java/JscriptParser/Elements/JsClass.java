@@ -1,8 +1,8 @@
-package JscriptParser;
+package JscriptParser.Elements;
 
 import java.util.LinkedList;
 
-public class JsClass extends Element{
+public class JsClass extends StackElement {
 
     private LinkedList<Function> functions = new LinkedList<>();
 
@@ -24,12 +24,13 @@ public class JsClass extends Element{
     public String getBody(){
         String body = "";
         for(Function function : functions){
-            body += function.getFunction();
+            body += function.getJs();
         }
         return body;
     }
 
-    public String getJsClass(){
+    @Override
+    public String getJs(){
         String jsClass="class "+getName()+"{\n";
         jsClass += getBody();
         jsClass+="}";

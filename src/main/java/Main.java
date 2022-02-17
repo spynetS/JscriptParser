@@ -1,7 +1,12 @@
 
 import JscriptParser.*;
+import JscriptParser.Elements.Function;
+import JscriptParser.Elements.Statments.ElseIfStatement;
+import JscriptParser.Elements.Statments.ElseStatement;
+import JscriptParser.Elements.Statments.IfStatement;
+import JscriptParser.Elements.Variable;
+import JscriptParser.Elements.VariableType;
 
-import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,9 +20,20 @@ public class Main {
         p.parse();
         Function say = p.currentClass.getFunction("sayName");
 
-        System.out.println(say.getFunction());
+        Variable var = new Variable("ali","'idot'",VariableType.CONST);
+        say.addToBody(var.getJsDeclarization());
 
-        writeToFile("test/TestP.js",p.currentClass.getJsClass());
+        IfStatement ifStatement = new IfStatement();
+        ifStatement.setConditions("true");
+        ifStatement.addToBody("//djdhwkajd");
+        ElseIfStatement elseIfStatement = new ElseIfStatement();
+        elseIfStatement.setConditions("knas");
+        elseIfStatement.addToBody("console.log('what');");
+        ifStatement.addElseIf(elseIfStatement);
+
+        say.addToBody(ifStatement);
+
+        writeToFile("test/TestP.js",p.currentClass.getJs());
     }
 
     static void writeToFile(String path,String toWrite){

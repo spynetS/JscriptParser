@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Jscript:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Jscript_jar</output-path>
+    <root id="archive" name="Jscript.jar">
+      <element id="module-output" name="Jscript" />
+    </root>
+  </artifact>
+</component>
