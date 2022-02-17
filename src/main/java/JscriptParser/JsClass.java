@@ -1,11 +1,11 @@
-package javascriptParser;
+package JscriptParser;
 
 import java.util.LinkedList;
 
-public class Component{
+public class JsClass extends Element{
 
     private LinkedList<Function> functions = new LinkedList<>();
-    private String componentName = "Page2";
+
     public Function getFunction(String functionName){
         for(Function function:functions){
             if(function.getName().equals(functionName)){
@@ -21,7 +21,7 @@ public class Component{
         this.functions.remove(function);
     }
 
-    public String getContent(){
+    public String getBody(){
         String body = "";
         for(Function function : functions){
             body += function.getFunction();
@@ -29,11 +29,11 @@ public class Component{
         return body;
     }
 
-    public String getComponent(){
-        String component="class "+componentName+"{\n";
-        component += getContent();
-        component+="}";
-        return component;
+    public String getJsClass(){
+        String jsClass="class "+getName()+"{\n";
+        jsClass += getBody();
+        jsClass+="}";
+        return jsClass;
     }
 
 }

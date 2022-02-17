@@ -1,15 +1,9 @@
-package javascriptParser;
+package JscriptParser;
 
-public class Function{
+public class Function extends Element {
     private String body = ""; //code
-    private String name="";//function name
 
-    public void changeName(String name){
-       this.name = name;
-    }
-    public String getName(){
-        return this.name;
-    }
+
     public void addBody(String content){
         this.body+="\n"+content;
     }
@@ -21,7 +15,7 @@ public class Function{
         return body;
     }
     public String getFunction(){
-        String func = this.name+"(){";
+        String func = this.getName()+"(){";
         func = func+"\t"+getBody();
         func = func+"}";
         return func;
@@ -29,6 +23,6 @@ public class Function{
 
     @Override
     public String toString() {
-        return "Function{"+name+"}";
+        return "Function{"+getName()+"}";
     }
 }

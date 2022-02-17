@@ -1,15 +1,15 @@
-package javascriptParser;
+package JscriptParser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 public class Parser {
     private String path = "";
-    public Component currentClass;
+
+    public JsClass currentClass;
 
     public Parser(String path) {
         this.path = path;
@@ -19,13 +19,13 @@ public class Parser {
         return scanner.nextLine();
     }
 
-    private void addFunctionToCurrentClass(String functionLine,Scanner currentScanner){
+    private void addFunctionToCurrentClass(String functionLine,List<String> lines,int from){
         Function newFunction = new Function();
-        newFunction.changeName(functionLine.substring(0,functionLine.indexOf("(")).replace(" ",""));
+        newFunction.setName(functionLine.substring(0,functionLine.indexOf("(")).replace(" ",""));
         String body = "";
         int count = 0; // to see if the curly bracket belongs to the function
-        while (currentScanner.hasNextLine()) {
-            String data = currentScanner.nextLine();
+        for(int i = from;i<lines.size();i++) {
+            String data = lines.get(i);
             if(data.contains("{")){
                 count++;
             }
@@ -42,40 +42,37 @@ public class Parser {
     }
 
     public void parse() {
-        try {
-            File myObj = new File(this.path);
-            Scanner myReader = new Scanner(myObj);
-
+        try{
+            List<String> lines = Files.readAllLines(Paths.get(path));
             boolean isInClass = false;
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
+
+            for(int i = 0;i<lines.size();i++){
+                String data = lines.get(i);
 
                 if(data.contains("class")){
-                    Component classComp =new Component();
+                    JsClass classComp =new JsClass();
+                    classComp.setName(data.replace("class","").substring(0,data.replace("class","").length()-1).replace(" ",""));
                     currentClass = classComp;
                     isInClass = true;
                 }
                 if(isInClass){
                     if(data.contains("(")&&data.contains(")")){
-                        String nextLine = this.nextLine(myReader); // so we don't increase next loop
-                        if(nextLine.contains("{")){
+
+                        if(lines.get(i+1).contains("{")){
                             //it is a function bro
-                            addFunctionToCurrentClass(data,myReader);
+                            addFunctionToCurrentClass(data,lines,i+2);
                         }
                         else if(data.contains("{")){
                             //here to
-                            addFunctionToCurrentClass(data,myReader);
+                            addFunctionToCurrentClass(data,lines,i+1);
                         }
                     }
                 }
             }
-
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+        } catch (IOException e) {
             e.printStackTrace();
         }
-       currentClass.getContent();
+       currentClass.getBody();
     }
 
 

@@ -1,20 +1,46 @@
-package javascriptParser;
+
+import JscriptParser.*;
+
+import java.io.Console;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Main {
 
-    static String path="prototyping/Page2.js";
+    static String path="test/Test.js";
 
     public static void main(String[] args){
         Parser p = new Parser(path);
         p.parse();
-        Function f = new Function();
-        f.changeName("rerender");
-        f.addBody("document.getElementById('knas').outerHtml = '<div>what</div>'");
-        p.currentClass.addFunction(f);
-        Function constructor = p.currentClass.getFunction("constructor");
-        constructor.addBody("this.children[0]='what'");
+        Function say = p.currentClass.getFunction("sayName");
 
-        System.out.println(p.currentClass.getComponent());
+        System.out.println(say.getFunction());
+
+        writeToFile("test/TestP.js",p.currentClass.getJsClass());
+    }
+
+    static void writeToFile(String path,String toWrite){
+        try {
+            File myObj = new File(path);
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        try {
+            FileWriter myWriter = new FileWriter(path);
+            myWriter.write(toWrite);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
 }
