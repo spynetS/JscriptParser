@@ -5,9 +5,8 @@ import java.util.LinkedList;
 public class StackElement extends JsElement{
 
     private String name = ""; //code
-    private String body = ""; //code
     private LinkedList<Variable> variables = new LinkedList<>();
-
+    private LinkedList<JsElement> elements = new LinkedList<>();
 
     public LinkedList<Variable> getVariables() {
         return variables;
@@ -18,19 +17,16 @@ public class StackElement extends JsElement{
     }
 
     public String getBody() {
+        String body = "";
+        for(JsElement el : elements){
+            body+=el.getJs();
+        }
         return body;
     }
-    public void setBody(String body) {
-        this.body = body;
-    }
-    public void addToBody(String body) {
-        this.body += body+"\n";
-    }
+
+
     public void addToBody(JsElement body) {
-        this.body += body.getJs()+"\n";
-    }
-    public void removeFromBody(String body){
-        this.body.replace(body,"");
+        elements.add(body);
     }
 
     public String getName() {

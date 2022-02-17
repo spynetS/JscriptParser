@@ -5,6 +5,18 @@ import java.util.LinkedList;
 public class JsElement {
 
     private LinkedList<JsElement> elements = new LinkedList<>();
+    String js = "";
+
+    public JsElement() {
+    }
+
+    public JsElement(String js) {
+        this.js = js;
+    }
+
+    public void setJs(String js) {
+        this.js = js;
+    }
 
     public LinkedList<JsElement> getElements() {
         return elements;
@@ -16,7 +28,7 @@ public class JsElement {
         this.elements.remove(element);
     }
     public String getJs(){
-        return "";
+        return js;
     }
 
 }

@@ -1,6 +1,7 @@
 
 import JscriptParser.*;
 import JscriptParser.Elements.Function;
+import JscriptParser.Elements.JsElement;
 import JscriptParser.Elements.Statments.ElseIfStatement;
 import JscriptParser.Elements.Statments.ElseStatement;
 import JscriptParser.Elements.Statments.IfStatement;
@@ -16,22 +17,14 @@ public class Main {
     static String path="test/Test.js";
 
     public static void main(String[] args){
+
         Parser p = new Parser(path);
         p.parse();
         Function say = p.currentClass.getFunction("sayName");
+        Variable var = new Variable("test","test",VariableType.THIS);
+        say.addToBody(var);
+        say.addToBody(new JsElement("knas"));
 
-        Variable var = new Variable("ali","'idot'",VariableType.CONST);
-        say.addToBody(var.getJsDeclarization());
-
-        IfStatement ifStatement = new IfStatement();
-        ifStatement.setConditions("true");
-        ifStatement.addToBody("//djdhwkajd");
-        ElseIfStatement elseIfStatement = new ElseIfStatement();
-        elseIfStatement.setConditions("knas");
-        elseIfStatement.addToBody("console.log('what');");
-        ifStatement.addElseIf(elseIfStatement);
-
-        say.addToBody(ifStatement);
 
         writeToFile("test/TestP.js",p.currentClass.getJs());
     }

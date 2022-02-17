@@ -2,6 +2,7 @@ package JscriptParser;
 
 import JscriptParser.Elements.Function;
 import JscriptParser.Elements.JsClass;
+import JscriptParser.Elements.JsElement;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ public class Parser {
             }
             body+=data+"\n";
         }
-        newFunction.addToBody(body);
+        newFunction.addToBody(new JsElement(body));
         currentClass.addFunction(newFunction);
     }
 
