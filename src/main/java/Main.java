@@ -2,6 +2,7 @@
 import JscriptParser.*;
 import JscriptParser.Elements.Function;
 import JscriptParser.Elements.JsElement;
+import JscriptParser.Elements.Statments.Condition;
 import JscriptParser.Elements.Statments.ElseIfStatement;
 import JscriptParser.Elements.Statments.ElseStatement;
 import JscriptParser.Elements.Statments.IfStatement;
@@ -20,10 +21,6 @@ public class Main {
 
         Parser p = new Parser(path);
         p.parse();
-        Function say = p.currentClass.getFunction("sayName");
-        Variable var = new Variable("test","test",VariableType.THIS);
-        say.addToBody(var);
-        say.addToBody(new JsElement("knas"));
 
 
         writeToFile("test/TestP.js",p.currentClass.getJs());

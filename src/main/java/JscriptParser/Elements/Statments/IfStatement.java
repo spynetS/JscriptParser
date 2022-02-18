@@ -5,15 +5,10 @@ import sun.awt.image.ImageWatched;
 
 import java.util.LinkedList;
 
-public class IfStatement extends StackElement {
+public class IfStatement extends Condition {
 
     ElseStatement elseStatement;
     LinkedList<ElseIfStatement> elseIfStatements = new LinkedList<>();
-    private String conditions ="";
-
-    public String getConditions() {
-        return conditions;
-    }
 
     public ElseStatement getElseStatement() {
         return elseStatement;
@@ -41,17 +36,13 @@ public class IfStatement extends StackElement {
         this.elseIfStatements = elseIfStatements;
     }
 
-    public void setConditions(String conditions) {
-        this.conditions = conditions;
-    }
-
     public IfStatement() {
         this.setName("if");
     }
 
     @Override
     public String getJs() {
-        String ifstatement = "if("+conditions+"){\n";
+        String ifstatement = "if("+getCondition()+"){\n";
         ifstatement = ifstatement+"\t"+getBody();
         ifstatement = ifstatement+"}\n";
         for(ElseIfStatement elseIfStatement : elseIfStatements){

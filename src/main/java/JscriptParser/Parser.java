@@ -3,6 +3,7 @@ package JscriptParser;
 import JscriptParser.Elements.Function;
 import JscriptParser.Elements.JsClass;
 import JscriptParser.Elements.JsElement;
+import JscriptParser.Elements.Statments.IfStatement;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -41,7 +42,12 @@ public class Parser {
             else{
                 count-=1;
             }
-            body+=data+"\n";
+            if(data.contains("if")){
+
+            }
+            else{
+                body+=data+"\n";
+            }
         }
         newFunction.addToBody(new JsElement(body));
         currentClass.addFunction(newFunction);
@@ -80,6 +86,4 @@ public class Parser {
         }
        currentClass.getBody();
     }
-
-
 }
