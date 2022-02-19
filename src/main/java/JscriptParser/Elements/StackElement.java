@@ -8,6 +8,14 @@ public class StackElement extends JsElement{
     private LinkedList<Variable> variables = new LinkedList<>();
     private LinkedList<JsElement> elements = new LinkedList<>();
 
+    public LinkedList<JsElement> getElements() {
+        return elements;
+    }
+
+    public void setElements(LinkedList<JsElement> elements) {
+        this.elements = elements;
+    }
+
     public LinkedList<Variable> getVariables() {
         return variables;
     }
@@ -24,6 +32,15 @@ public class StackElement extends JsElement{
         return body;
     }
 
+    public LinkedList<StackElement> getStackelemnts(){
+        LinkedList<StackElement> stackElements = new LinkedList<>();
+        for(JsElement e : elements){
+            try{
+                stackElements.add((StackElement) e);
+            }catch (Exception error){}
+        }
+        return stackElements;
+    }
 
     public void addToBody(JsElement body) {
         elements.add(body);

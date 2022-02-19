@@ -21,8 +21,8 @@ public class Main {
 
         Parser p = new Parser(path);
         p.parse();
-
-
+        Function s = p.currentClass.getFunction("sayName");
+        s.getStackelemnts().get(0).addToBody(new JsElement("\n//comment bro"));
         writeToFile("test/TestP.js",p.currentClass.getJs());
     }
 

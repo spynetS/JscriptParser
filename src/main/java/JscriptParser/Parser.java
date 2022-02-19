@@ -3,6 +3,7 @@ package JscriptParser;
 import JscriptParser.Elements.Function;
 import JscriptParser.Elements.JsClass;
 import JscriptParser.Elements.JsElement;
+import JscriptParser.Elements.Statments.Condition;
 import JscriptParser.Elements.Statments.IfStatement;
 
 import java.io.*;
@@ -30,6 +31,7 @@ public class Parser {
         newFunction.setName(functionLine.substring(0,functionLine.indexOf("(")).replace(" ",""));
         newFunction.setArguments(functionLine.substring(functionLine.indexOf("(")+1,functionLine.indexOf(")")));
         String body = "";
+        Condition currentConditon = null;
         int count = 0; // to see if the curly bracket belongs to the function
         for(int i = from;i<lines.size();i++) {
             String data = lines.get(i);
@@ -42,14 +44,38 @@ public class Parser {
             else{
                 count-=1;
             }
-            if(data.contains("if")){
+            if(data.contains("(")&&data.contains(")")){
+                String conditionString = data.substring(data.indexOf('(')+1,data.indexOf(')'));
+                if(lines.get(i+1).replace(" ","").equals("{")&&!data.replace(conditionString,"").contains(";")){
+                    //it is a function bro
+                    Condition condition = new Condition();
+                    condition.setName(data.substring(0,data.indexOf("(")).replace(" ",""));
+                    condition.setCondition(conditionString);
+                    currentConditon=condition;
+                    continue;
+                }
+                else if(data.contains("{")){
+                    Condition condition = new Condition();
+                    condition.setName(data.substring(0,data.indexOf("(")).replace(" ",""));
+                    condition.setCondition(conditionString);
+                    currentConditon=condition;
+                    continue;
+                }
+                else if (currentConditon==null){
+                    newFunction.addToBody(new JsElement(data+"\n"));
+                }
+            }
+            else {
+                newFunction.addToBody(new JsElement(data+"\n"));
+            }
 
+            if(currentConditon!=null){
+                currentConditon.addToBody(new JsElement(data));
+                newFunction.addToBody(currentConditon);
+                currentConditon = null;
             }
-            else{
-                body+=data+"\n";
-            }
+
         }
-        newFunction.addToBody(new JsElement(body));
         currentClass.addFunction(newFunction);
     }
 
@@ -69,8 +95,8 @@ public class Parser {
                 }
                 if(isInClass&&!data.contains("if")){
                     if(data.contains("(")&&data.contains(")")){
-
-                        if(lines.get(i+1).replace(" ","").equals("{")&&!data.contains(";")){
+                        String conditionString = data.substring(data.indexOf('(')+1,data.indexOf(')'));
+                        if(lines.get(i+1).replace(" ","").equals("{")&&!data.replace(conditionString,"").contains(";")){
                             //it is a function bro
                             addFunctionToCurrentClass(data,lines,i+2);
                         }
